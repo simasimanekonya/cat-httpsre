@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1分ごとのHTTPリクエスト</title>
+</head>
+<body>
+  <h1>1分ごとにHTTPリクエストを送信します</h1>
+  <div id="response"></div>
+
+  <script>
+    // 送信先URL
+    const url = 'https://example.com/api'; // 変更してください
+
+    // 定期的にリクエストを送信する関数
+    function sendRequest() {
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTPエラー: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          // レスポンスを表示
+          document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+          console.error('リクエストエラー:', error);
+          document.getElementById('response').textContent = `エラー: ${error.message}`;
+        });
+    }
+
+    // 初回リクエスト
+    sendRequest();
+
+    // 1分ごとにリクエストを送信
+    setInterval(sendRequest, 60000);
+  </script>
+</body>
+</html>
